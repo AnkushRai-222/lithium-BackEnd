@@ -40,4 +40,61 @@ router.get('/student-details/:name', function(req, res){
     res.send('Dummy response')
 })
 
+
+//This is a asssingment of the day
+router.get('/movies',function(req,res){
+    let myMovie = ["Rang de basanti", "The shining", "Lord of the rings", "Batman begins"]
+    res.send(myMovie)
+})
+
 module.exports = router;
+
+// 2nd Assingment
+router.get('/movies/:indexNumber',function(req,res){
+    let myMovie = ["Rang de basanti", "The shining", "Lord of the rings", "Batman begins"]
+    let index  = req.params.indexNumber 
+
+    res.send(myMovie[index] || " put  a valid index ")
+
+})
+
+//3rd Assingment
+router.get('/films',function(req,res){
+    let myFilms = [ {
+        id: 1,
+        name: 'The Shining'
+       }, {
+        id: 2,
+        name: 'Incendies'
+       }, {
+        id: 3,
+        name: 'Rang de Basanti'
+       }, {
+        id: 4,
+        name: 'Finding Nemo'
+       }]
+       res.send(myFilms)
+       
+})
+
+
+//4th Assingment
+router.get('/film/:filmid',function(req,res){
+    let myFilms = [ {
+        id: 1,
+        name: 'The Shining'
+       }, {
+        id: 2,
+        name: 'Incendies'
+       }, {
+        id: 3,
+        name: 'Rang de Basanti'
+       }, {
+        id: 4,
+        name: 'Finding Nemo'
+       }]
+    let index  = req.params.filmid 
+    res.send(myFilms[index] || " put  a valid index .")
+     
+        
+})
