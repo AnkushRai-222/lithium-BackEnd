@@ -53,8 +53,11 @@ module.exports = router;
 router.get('/movies/:indexNumber',function(req,res){
     let myMovie = ["Rang de basanti", "The shining", "Lord of the rings", "Batman begins"]
     let index  = req.params.indexNumber 
-
-    res.send(myMovie[index] || " put  a valid index ")
+if(index > (myMovie.length-1)){
+    res.send("invalid index")
+   }else{
+    res.send(myMovie[index])
+   }
 
 })
 
@@ -94,7 +97,13 @@ router.get('/film/:filmid',function(req,res){
         name: 'Finding Nemo'
        }]
     let index  = req.params.filmid 
-    res.send(myFilms[index] || " put  a valid index .")
+    let movie = myFilms.find(film => film.id == index);
+
+    if(movie){
+        res.send(movie)
+    }else{
+        res.send(" movie does not exist with this id")
+    }
      
         
 })
