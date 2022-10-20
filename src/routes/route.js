@@ -67,9 +67,15 @@ let players =
 
 router.post('/players',function(req,res){
     let body = req.body;
-
+     for(let i = 0 ; i<players.length;i++){
+    const element = players[i];
+    if(element.name === body.name){
+       return res.send({message:"Name is exist"})
+    }else{
         players.push(body)
-        res.send(  { data: players , status: true }  )
+        return res.send(  { data: players , status: true }  )
+    }
+   }
 
     
 
