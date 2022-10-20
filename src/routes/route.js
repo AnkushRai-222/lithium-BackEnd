@@ -160,4 +160,55 @@ router.post( "/post-query-2", function (req, res){
 })
 
 
+//Assingment of the day:-
+let persons= [
+    {
+    "name": "PK",
+    "age": 10,
+    "votingStatus": false
+ },
+ {
+    "name": "SK",
+    "age": 20,
+    "votingStatus": false
+ },
+ {
+    "name": "AA",
+    "age": 70,
+    "votingStatus": false
+ },
+ {
+    "name": "SC",
+    "age": 5,
+    "votingStatus": false
+ },
+ {
+    "name": "HO",
+    "age": 40,
+    "votingStatus": false
+ }
+ ]
+ 
+
+ router.post('/votingOne',function(req,res){
+    let QueryParam = req.query;
+    let voting = QueryParam.voting
+    let find = persons.filter(x => x.age > voting ? x.votingStatus = true : x.votingStatus = false );
+    if(find){
+        
+        res.send({data:find})
+    }else{
+        res.send({msg:"You are not eligible"});
+    }
+
+    //method 2nd
+//     const updatedPersons =[]
+//      persons.forEach( (person) =>{
+//         if(person.age > voting){
+//             person.votingStatus = true;
+//         updatedPersons.push(person)
+//      }
+//  })
+//  return res.send( {updatedPersons: updatedPersons})
+});
 module.exports = router;
