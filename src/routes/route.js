@@ -7,8 +7,12 @@ router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
 
-router.post("/createUser", UserController.createUser  )
+router.post("/createBook", async function (req, res) {
+    let data= req.body
+    let savedData= await UserModel.create(data)
+    res.send({msg: savedData})
+})
 
-router.get("/getUsersData", UserController.getUsersData)
+router.get("/getBookData", UserController.getBookData)
 
 module.exports = router;
