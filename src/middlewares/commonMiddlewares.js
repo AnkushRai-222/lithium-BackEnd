@@ -1,29 +1,19 @@
-const { isValidObjectId } = require("mongoose");
 
 const headerValid = function (req ,res , next){
-     const isAvail = req.headers["isfreeappuser"] 
-     if(!isAvail){
+     const isFreeAppUser = req.headers["isfreeappuser"] 
+     if(!isFreeAppUser){
        return res.send({msg:"the request is missing a mandatory header"})
+     }else{
+      isFreeAppUser = isFreeAppUser.toLowerCase() === 'true' ? true : false;
+      req.isFreeAppUser = isFreeAppUser
+      next();
      }
     
-      next();
+    
     
    
 }
 
-const validUserAndProduct = async function(req,res,next){
-   const {userId,productId}=req.body;
-   const validUser = isValidObjectId(userId)
-   const validProduct = isValidObjectId(productId);
-   if(!validUser){
-      return res.send({msg:"your user id is invalid or not mentionsed"})
-   }else if(!validProduct){
-      return res.send({msg:"your product  id is invalid or not mentionsed"})
-
-   }
-   next();
-}
-module.exports.validUserAndProduct=validUserAndProduct;
 module.exports.headerValid=headerValid;
 // const mid1= function ( req, res, next) {
 //     req.falana= "hi there. i am adding something new to the req object"

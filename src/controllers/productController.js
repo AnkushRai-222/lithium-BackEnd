@@ -2,8 +2,11 @@
 const ProductModel = require('../models/productModel');
 
 const createProduct = async function(req,res){
-    let data = req.body;
-    let savedata = await ProductModel.create(data);
+    const{name,category,price} = req.body;
+    if(!name || !category || !price){
+        return res.send({status:false,message:"All field is required to Body"})
+    }
+    let savedata = await ProductModel.create(name,category,price);
     res.send({msg:savedata})
 }
 module.exports.createProduct=createProduct;

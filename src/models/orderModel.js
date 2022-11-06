@@ -11,11 +11,8 @@ const orderSchema = new mongoose.Schema( {
         ref:"Product",
     },
     amount:Number,
-    isFreeAppUser:{
-        type:Boolean,
-        default:true
-    },
-    date:String
+    isFreeAppUser:Boolean,
+     date:Date
 
 }, { timestamps: true });
 

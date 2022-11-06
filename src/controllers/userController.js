@@ -2,8 +2,12 @@ const UserModel= require('../models/userModel')
 
 
 const createUser =  async function(req,res){
-    let data = req.body
-    let saveData = await UserModel.create(data);
+    let {name,balance,address,age,gender} = req.body
+    let isFreeAppUser = req.isFreeAppUser;
+    if(!name || !balance || !address || !age || !gender){
+        return res.send({status:false,message:"all field is required in the body"})
+    }
+    let saveData = await UserModel.create(name,balance,address,age,gender,isFreeAppUser);
     res.send({msg:saveData});
 }
 

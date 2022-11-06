@@ -11,7 +11,7 @@ router.get("/test-me", function (req, res) {
 
 router.post('/create-user',commonMW.headerValid,UserController.createUser)
 router.post('/create-product',ProductController.createProduct);
-router.post('/create-order',commonMW.headerValid,commonMW.validUserAndProduct,OrderController.createOrder);
+router.post('/create-order',commonMW.headerValid,OrderController.createOrder);
 
 
 

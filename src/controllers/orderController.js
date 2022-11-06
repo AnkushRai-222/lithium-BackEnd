@@ -3,32 +3,67 @@
 const userModel = require('../models/userModel');
 const productModel=require('../models/productModel');
 const orderModel = require("../models/orderModel");
+const { isValidObjectId } = require('mongoose');
 
 const createOrder = async function(req,res){
-   const body = req.body;
-   const userID = body.userId
-   const productID = body.productId;
-   const status = body.isFreeAppUser;
-   const amount = body.amount;
-   if(status == false){
-    const balanceUser = await userModel.findById(userID).select({balance:1,_id:-1})
-    const productPrice = await productModel.findById(productID).select({price:1,_id:-1});
-    const bal = balanceUser.balance;
-    const price = productPrice.price
-    if(bal < amount){
-        return res.send({msg:"Your balance is less than Amount "})
+  const{userId,productId} = req.body;
+  
+  if(!userId || !productId){
+    return res.send({status:false,message:"UserId and productId is required in body"})
+  }
+
+  if(isValidObjectId(userId)){
+    return res.send({status:false,message:"UserId is invalid"})
+  }
+  
+
+  if(isValidObjectId(productId)){
+    return res.send({status:false,message:"productId is invalid"})
+  }
+
+
+  const userDetail =  await userModel.findById(userId)
+  if(!userDetail){
+    return res.send({status:false,message:"User not found in DB"})
+  }
+
+  const productDetail = await productModel.findById(productId);
+  if(!productDetail){
+    return res.send({status:false,message:"product not found in DB"})
+  }
+
+   const isFreeAppUser = req.isFreeAppUser
+  if(isFreeAppUser){ //true
+ 
+   const order = await orderModel.create({
+     userId:userId,
+     productId:productId,
+     amount:0,
+     isFreeAppUser:isFreeAppUser,
+     date: new Date()
+   })
+   return res.send({status:true,data:order,message:"Order has been Created"})
+  }
+  else{
+ //false
+
+    if(userDetail.balance < productDetail.price){
+        return res.send({status:false,message:"insfficient Balance"})
     }
-    else{
-        const deduct = bal - amount
-        const updateBalance = await userModel.findOneAndUpdate({_id:userID},{balance:deduct},{new:true});
-        const Order = await orderModel.create(body);
-        return res.send({AmountAvailable:deduct,msg:Order})
+    const orderDetail = {
+        userId:userId,
+        productId:productId,
+        amount:productDetail.price,
+        isFreeAppUser:isFreeAppUser,
+        date: new Date()
     }
-   }else if (status == true){
-    body.amount=0;
-    const purchase = await orderModel.create(body);
-    return res.send({msg:purchase});
-   }
+
+    const order = await orderModel.create(orderDetail);
+    const user = await  orderModel.findByIdAndUpdate(userId,{$set:userDetail.balance - productDetail.price})
+
+    return res.send({status:true,data:order,message:"Your  Order has Placed "})
+
+  }
 
 }
 module.exports.createOrder=createOrder;
